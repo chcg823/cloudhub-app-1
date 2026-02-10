@@ -1,0 +1,4 @@
+api:
+  name: "@project.name@"
+  version: "@project.version@"
+  basepath: "/api"

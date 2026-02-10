@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="cloudhub-app-1Flow" doc:id="d21f37f1-2711-4d66-a11d-0e2dcc4e31bd" >
+		<http:listener doc:name="Listener" doc:id="f3404a21-0bc0-432c-8b3b-3fb067682d93" config-ref="HTTP_Listener_config" path="/hello"/>
+		<json-logger:logger doc:name="Start" doc:id="45026133-e58f-4c0a-9d75-7a97b4384b50" tracePoint="START" message="REQUEST RECEIVED" config-ref="JSON_Logger_Config">
+			<json-logger:content ><![CDATA[#[""]]]></json-logger:content>
+		</json-logger:logger>
+		<ee:transform doc:name="Greetings" doc:id="7709a6b1-cb17-4a47-a21a-8ff272ec9f0f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Hello, World!",
+	appName: p('api.name'),
+	version: p('api.version')
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="End" doc:id="d3c512e8-e487-46a4-a3b1-58977038235d" config-ref="JSON_Logger_Config" message="FLOW END" tracePoint="END">
+			<json-logger:content ><![CDATA[#[""]]]></json-logger:content>
+		</json-logger:logger>
+	</flow>
+</mule>
